@@ -1,21 +1,27 @@
-# Simple Math Utils
+# Chanjing API Client
 
-一个简单的数学工具库，提供基本的数学运算功能。
+一个用于与禅境API交互的Python客户端库。
 
 ## 功能特点
 
-- 提供基本的数学运算：加法、减法、乘法、除法
-- 内置类型提示支持
+- 提供与禅境API的简单集成
+- 健壮的错误处理和日志记录
+- 类型提示支持
 - 详细的文档和示例
 - 完整的测试覆盖
-- 健壮的错误处理和日志记录
 
 ## 安装
 
 使用pip安装：
 
 ```bash
-pip install dongjak-math-utils
+pip install chanjing
+```
+
+或者使用uv安装（推荐）：
+
+```bash
+uv pip install chanjing
 ```
 
 ## 使用方法
@@ -23,24 +29,48 @@ pip install dongjak-math-utils
 ### 基本用法
 
 ```python
-from dongjak_math_utils import add, subtract, multiply, divide
+from chanjing import ChanjingHttpClient
+from chanjing.schemas import APIResponse
 
-# 基本运算
-result = add(10, 5)      # 15
-result = subtract(10, 5)  # 5
-result = multiply(10, 5)  # 50
-result = divide(10, 5)    # 2.0
+# 初始化客户端
+client = ChanjingHttpClient(api_key="your_api_key_here")
 
-# 支持浮点数
-result = add(3.14, 2.71)  # 5.85
+# 发送GET请求
+response = client.request("GET", "endpoint/path")
+
+# 发送POST请求
+data = {"key": "value"}
+response = client.request("POST", "endpoint/path", json=data)
+
+# 处理响应
+print(f"响应代码: {response.code}")
+print(f"响应消息: {response.msg}")
+print(f"追踪ID: {response.trace_id}")
+print(f"响应数据: {response.data}")
 ```
 
-### 高级用法
+### 错误处理
 
 ```python
-# 链式操作
-result = divide(multiply(add(10, 5), subtract(8, 3)), 2)
-# 等同于 ((10 + 5) * (8 - 3)) / 2 = 37.5
+from chanjing import ChanjingHttpClient
+
+client = ChanjingHttpClient(api_key="your_api_key_here")
+
+try:
+    response = client.request("GET", "endpoint/path")
+    # 处理成功响应
+except ValueError as e:
+    # 处理参数错误
+    print(f"参数错误: {str(e)}")
+except ConnectionError as e:
+    # 处理连接错误
+    print(f"连接错误: {str(e)}")
+except TimeoutError as e:
+    # 处理超时错误
+    print(f"请求超时: {str(e)}")
+except Exception as e:
+    # 处理其他错误
+    print(f"请求失败: {str(e)}")
 ```
 
 ## 开发
@@ -52,12 +82,12 @@ result = divide(multiply(add(10, 5), subtract(8, 3)), 2)
 3. 安装开发依赖
 
 ```bash
-git clone https://github.com/yourusername/dongjak-math-utils.git
-cd dongjak-math-utils
+git clone https://github.com/yourusername/chanjing.git
+cd chanjing
 python -m venv .venv
 .venv\Scripts\activate  # Windows
 source .venv/bin/activate  # Linux/Mac
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 ```
 
 ### 运行测试
@@ -66,86 +96,33 @@ pip install -e ".[dev]"
 pytest
 ```
 
-### 发布到PyPI
+## 结构性变更
 
-本项目使用Hatch作为构建和发布工具。以下是发布到PyPI的步骤：
+### 2025-03-04
+- 实现了`ChanjingHttpClient.request`方法，提供了与禅境API的HTTP交互功能
+- 添加了健壮的错误处理和日志记录
+- 添加了请求和响应的类型提示
 
-#### 1. 安装Hatch
+## 项目结构
 
-```bash
-pip install hatch
-# 或使用uv
-uv pip install hatch
-```
-
-#### 2. 配置PyPI凭证
-
-有两种方式配置PyPI凭证：
-
-**方式一：使用API令牌（推荐）**
-
-1. 在[PyPI官网](https://pypi.org/manage/account/)注册并登录账号
-2. 在账号设置中创建API令牌
-3. 创建`~/.pypirc`文件：
-
-```
-[pypi]
-username = __token__
-password = pypi-AgEIcHlwaS5vcmcCJDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-**方式二：使用环境变量**
-
-```bash
-# Windows (PowerShell)
-$env:HATCH_INDEX_USER="__token__"
-$env:HATCH_INDEX_AUTH="pypi-AgEIcHlwaS5vcmcCJDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-# Linux/Mac
-export HATCH_INDEX_USER=__token__
-export HATCH_INDEX_AUTH=pypi-AgEIcHlwaS5vcmcCJDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-#### 3. 构建分发包
-
-```bash
-hatch build
-```
-
-这将在`dist/`目录下创建源代码分发包（.tar.gz）和轮子分发包（.whl）。
-
-#### 4. 发布到PyPI
-
-```bash
-hatch publish
-```
-
-如果您想先在测试环境（TestPyPI）上发布：
-
-```bash
-hatch publish -r test
-```
-
-#### 5. 验证发布
-
-发布成功后，您可以通过pip安装您的包来验证：
-
-```bash
-pip install dongjak-math-utils
+```markdown
+chanjing/
+├── app/                      # 主应用目录
+│   ├── module1/                 # 模块1
+│   │   ├── __init__.py
+│   │   ├── schema.py         # 模型
+│   │   ├── utils.py          # 工具函数
+├── tests/                     # 测试目录
+│   ├── test_module1.py
+│   └── __init__.py
+├── docs/                      # 文档目录
+│   ├── __init__.py
+│   └── index.md              # 主页
+└── examples/                  # 示例目录
+    ├── __init__.py
+    └── example1.py           # 示例1
 ```
 
 ## 许可证
 
 MIT
-
-## 项目结构
-
-```
-dongjak_math_utils/
-├── dongjak_math_utils/       # 主库目录
-│   ├── __init__.py          # 导出公共API
-│   ├── core.py              # 核心功能
-├── tests/                   # 测试目录
-│   └── test_core.py         # 核心功能测试
-└── examples/                # 示例目录
-    └── basic_usage.py       # 基本用法示例
