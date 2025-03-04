@@ -6,15 +6,38 @@ from .schemas import APIResponse
 
 class ChanjingHttpClient(object):
 
-    def __init__(self, api_key: str, base_url: str = "https://www.chanjing.cc/api/open/v1") -> None:
+    def __init__(self, app_id: str,app_secret: str, base_url: str = "https://www.chanjing.cc/api/open/v1") -> None:
+        """
+        初始化禅境HTTP客户端
+        Args:
+            app_id: API应用ID
+            app_secret: API应用密钥
+            base_url: API基础URL，默认为"https://www.chanjing.cc/api/open/v1"
+        """
+        self.base_url = base_url
+        url =  f"{self.base_url}/access_token"
+        headers = {
+            "Content-Type": "application/json",
+            "charset ": "utf-8"
+        }
+        payload = {
+                "app_id": app_id,
+                "secret_key": app_secret
+        }
+        response = requests.post(url, headers=headers, json=payload)
+        if response.status_code == 200:
+           self.access_token = response.json()['data']['access_token']
+        else:
+            raise Exception(f"Failed to get access token: {response.text}")
+       
         """
         初始化禅境HTTP客户端
         
         Args:
-            api_key: API密钥
+            access_token: API访问令牌
             base_url: API基础URL，默认为"https://www.chanjing.cc/api/open/v1"
         """
-        self.api_key = api_key
+        
         self.base_url = base_url.rstrip('/')
         self.session = requests.Session()
         self.logger = logging.getLogger("chanjing")
@@ -47,13 +70,13 @@ class ChanjingHttpClient(object):
         # 设置请求头
         headers = kwargs.pop("headers", {})
         headers.update({
-            "Authorization": f"Bearer {self.api_key}",
+            "access_token": self.access_token,
             "Content-Type": "application/json",
             "Accept": "application/json"
         })
         
         # 记录请求信息（不包含敏感信息）
-        safe_headers = {k: v for k, v in headers.items() if k.lower() != "authorization"}
+        safe_headers = {k: v for k, v in headers.items() if k.lower() != "access_token"}
         self.logger.debug(f"发送 {method} 请求到 {full_url}")
         self.logger.debug(f"请求头: {safe_headers}")
         

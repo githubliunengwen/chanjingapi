@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Generic, TypeVar
+
+T = TypeVar('T')
 
 class Figure(BaseModel):
     """人物形象数据模型"""
@@ -34,12 +36,9 @@ class ResponseData(BaseModel):
     list: List[Person]
     page_info: PageInfo
 
-class APIResponse(BaseModel):
+class APIResponse(BaseModel, Generic[T]):
     """API响应模型"""
     trace_id: str
     code: int
     msg: str
-    data: ResponseData
-
-
-
+    data: T

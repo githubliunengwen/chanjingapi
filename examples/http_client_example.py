@@ -18,8 +18,8 @@ def main():
     print("-" * 30)
     
     # 从环境变量获取API密钥（推荐做法）
-    api_key = os.environ.get("CHANJING_API_KEY")
-    
+    api_key = "cj_test_id"
+    api_secret  = "cj_test_secret_key"
     if not api_key:
         print("警告: 未设置CHANJING_API_KEY环境变量，使用示例API密钥")
         print("在实际使用中，请设置您的API密钥:")
@@ -28,35 +28,37 @@ def main():
         api_key = "example_api_key"  # 这只是一个示例，实际使用时需要替换
     
     # 初始化客户端
-    client = ChanjingHttpClient(api_key=api_key)
+    client = ChanjingHttpClient(app_id=api_key,app_secret=api_secret)
     
     try:
-        # 示例1: 发送GET请求
-        print("\n示例1: 发送GET请求")
-        print("-" * 20)
-        # 注意: 这是一个示例端点，实际使用时需要替换为真实的API端点
-        response = client.request("GET", "persons")
-        print_response(response)
+        # # 示例1: 发送GET请求
+        # print("\n示例1: 发送GET请求")
+        # print("-" * 20)
+        # # 注意: 这是一个示例端点，实际使用时需要替换为真实的API端点
+        # response = client.request("GET", "persons")
+        # print_response(response)
         
-        # 示例2: 发送带参数的GET请求
-        print("\n示例2: 发送带参数的GET请求")
-        print("-" * 20)
-        params = {
-            "page": 1,
-            "size": 10,
-            "keyword": "示例"
-        }
-        response = client.request("GET", "persons", params=params)
-        print_response(response)
+        # # 示例2: 发送带参数的GET请求
+        # print("\n示例2: 发送带参数的GET请求")
+        # print("-" * 20)
+        # params = {
+        #     "page": 1,
+        #     "size": 10,
+        #     "keyword": "示例"
+        # }
+        # response = client.request("GET", "persons", params=params)
+        # print_response(response)
         
         # 示例3: 发送POST请求
         print("\n示例3: 发送POST请求")
         print("-" * 20)
         data = {
-            "name": "示例人物",
-            "gender": "male"
-        }
-        response = client.request("POST", "persons", json=data)
+            "name": "open_api_测试",
+            "material_video": "http://vjs.zencdn.net/v/oceans.mp4",
+            "callback":"https://xx.com",
+            "train_type":""
+            }
+        response = client.request("POST", "create_customised_person", json=data)
         print_response(response)
         
     except ValueError as e:

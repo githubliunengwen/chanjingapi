@@ -35,5 +35,5 @@ class CustomisedPerson(object):
         Args:
             request: 创建定制数字人请求
         """
-        self.client.request("POST", "customised/person", json=request.model_dump())
+        self.client.request("POST", "create_customised_person", json=request.model_dump())
         pass
