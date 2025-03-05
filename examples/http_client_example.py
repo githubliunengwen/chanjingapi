@@ -15,6 +15,13 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
+"""
+   APP_ID: API应用ID
+   APP_SECRET: API应用密钥
+  
+   """
+APP_ID = "cj_test_id"
+APP_SECRET = "cj_test_secret_key"
 
 def main():
     """演示禅境API客户端基本用法"""
@@ -117,7 +124,7 @@ def main():
         # )
 
         # 初始化客户端
-        client = chanjing.core.ChanjingHttpClient()
+        client = chanjing.core.ChanjingHttpClient(APP_ID, APP_SECRET)
 
         # person = chanjing.customised.person.CustomisedPerson(client)
         # response = person.create(request)

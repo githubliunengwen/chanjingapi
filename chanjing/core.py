@@ -4,20 +4,17 @@ import logging
 from typing import Dict, Any, Optional
 from .schemas import APIResponse
 
-"""
-   APP_ID: API应用ID
-   APP_SECRET: API应用密钥
-   """
-APP_ID = "cj_test_id"
-APP_SECRET = "cj_test_secret_key"
+
 
 
 class ChanjingHttpClient(object):
 
-    def __init__(self, base_url: str = "https://www.chanjing.cc/api/open/v1") -> None:
+    def __init__(self,app_id: str, app_secret: str, base_url: str = "https://www.chanjing.cc/api/open/v1") -> None:
         """
         初始化禅境HTTP客户端
         Args:
+            app_id: API应用ID
+            app_secret: API应用密钥
             base_url: API基础URL，默认为"https://www.chanjing.cc/api/open/v1"
         """
         self.base_url = base_url
@@ -27,8 +24,8 @@ class ChanjingHttpClient(object):
             "charset ": "utf-8"
         }
         payload = {
-                "app_id": APP_ID,
-                "secret_key": APP_SECRET
+                "app_id": app_id,
+                "secret_key": app_secret
         }
         response = requests.post(url, headers=headers, json=payload)
         if response.status_code == 200:
