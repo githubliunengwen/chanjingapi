@@ -106,7 +106,7 @@ class Video(object):
         Args:
             request: 合成视频列表请求
         """
-        response = self.client.request("POST", "list_video", json=request.model_dump())
+        response = self.client.request("POST", "video_list", json=request.model_dump())
         return response.data
 
     def detail(self , id:str)->chanjing.schemas.SynthesisVideo:

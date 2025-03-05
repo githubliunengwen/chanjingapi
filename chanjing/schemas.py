@@ -85,3 +85,4 @@ class FontInfo(BaseModel):
     id: str
     name: str
     preview: str
+    ttf_path: str

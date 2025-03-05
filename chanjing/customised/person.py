@@ -1,3 +1,4 @@
+from operator import ifloordiv
 from typing import Optional
 from pydantic import BaseModel
 import chanjing.schemas
@@ -76,7 +77,7 @@ class CustomisedPerson(object):
         response = self.client.request("GET", "customised_person", params={"id": id})
         return response.data
 
-    def delete(self , request:DeleteCustomisedPersonRequest)->chanjing.schemas.APIResponse:
+    def delete(self , request:DeleteCustomisedPersonRequest)->bool:
         """
         删除定制数字人
         
@@ -84,4 +85,4 @@ class CustomisedPerson(object):
             request: 删除定制数字人请求
         """
         response = self.client.request("POST", "delete_customised_person", json=request.model_dump())
-        return response
+        return not bool(response.data)

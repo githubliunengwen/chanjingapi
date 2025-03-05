@@ -21,25 +21,25 @@ def main():
     print("禅境API客户端演示")
     print("-" * 30)
     
-    # 从环境变量获取API密钥（推荐做法）
-    api_key = "cj_test_id"
-    api_secret  = "cj_test_secret_key"
-    if not api_key:
-        print("警告: 未设置CHANJING_API_KEY环境变量，使用示例API密钥")
-        print("在实际使用中，请设置您的API密钥:")
-        print("  Windows (PowerShell): $env:CHANJING_API_KEY='your_api_key'")
-        print("  Linux/Mac: export CHANJING_API_KEY='your_api_key'")
-        api_key = "example_api_key"  # 这只是一个示例，实际使用时需要替换
+    # # 从环境变量获取API密钥（推荐做法）
+    # api_key = "cj_test_id"
+    # api_secret  = "cj_test_secret_key"
+    # if not api_key:
+    #     print("警告: 未设置CHANJING_API_KEY环境变量，使用示例API密钥")
+    #     print("在实际使用中，请设置您的API密钥:")
+    #     print("  Windows (PowerShell): $env:CHANJING_API_KEY='your_api_key'")
+    #     print("  Linux/Mac: export CHANJING_API_KEY='your_api_key'")
+    #     api_key = "example_api_key"  # 这只是一个示例，实际使用时需要替换
     
-    # 初始化客户端
-    client = ChanjingHttpClient(app_id=api_key,app_secret=api_secret)
+    # # 初始化客户端
+    # client = ChanjingHttpClient(app_id=api_key,app_secret=api_secret)
     
     try:
         # # 示例1: 发送GET请求
-        print("\n示例1: 发送GET请求")
-        print("-" * 20)
+        # print("\n示例1: 发送GET请求")
+        # print("-" * 20)
         # 注意: 这是一个示例端点，实际使用时需要替换为真实的API端点
-        response = client.request("GET", "font_list")
+        # response = client.request("GET", "font_list")
         # print_response(response)
         
         # 示例2: 发送带参数的GET请求
@@ -69,7 +69,7 @@ def main():
         # )
 
         # request = chanjing.customised.person.DeleteCustomisedPersonRequest(
-        #     id="C-a03406b0ea524db9878e5394160aa598"
+        #     id="C-9c70756460a246b59e377e45e9cc7990"
         # )
 
         # 定制声音
@@ -85,13 +85,13 @@ def main():
         # )
 
         # 合成视频
-        # request = chanjing.synthesis.ListVideoRequest(
-        #     page=1,
-        #     page_size=10
-        # )
+        request = chanjing.synthesis.ListVideoRequest(
+            page=1,
+            page_size=10
+        )
 
         # request = chanjing.synthesis.CreateVideoRequest(
-        #     person= chanjing.synthesis.PersonConfig( 
+        #     person= chanjing.synthesis.PersonConfig(
         #         id="C-b6a9747074ab4b7b8006f61f22ff022c",
         #         x=0,
         #         y=480,
@@ -116,8 +116,26 @@ def main():
         #     screen_height=1920
         # )
 
-        # response = client.request("POST", "video_list", json=request.model_dump())
+        # 初始化客户端
+        client = chanjing.core.ChanjingHttpClient()
 
+        # person = chanjing.customised.person.CustomisedPerson(client)
+        # response = person.create(request)
+        # response = person.list(request)
+        # response = person.detail("C-9c70756460a246b59e377e45e9cc7990")
+        # response = person.delete(request)
+        # audio = chanjing.customised.audio.CustomisedAudio(client)
+        # response = audio.create(request)
+        # response = audio.list(request)
+        # response = audio.detail("C-Audio-039372c2c3854155808c3097b6e7897f")
+        #
+        video = chanjing.synthesis.Video(client)
+        # response = video.create(request)
+        # response = video.list(request)
+        # response = video.detail("b89be741-68d6-49ed-92b4-b6abb9f19780")
+        response = video.font_list()
+      
+        print(response)
         # 示例3: 发送POST请求
         # print("\n示例3: 发送POST请求")
         # print("-" * 20)
@@ -128,7 +146,7 @@ def main():
         # response = client.request("POST", "list_customised_person", json=data)
 
 
-        print_response(response)
+        # print_response(response)
         
     except ValueError as e:
         print(f"参数错误: {e}")
