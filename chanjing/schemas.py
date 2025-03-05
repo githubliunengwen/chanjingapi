@@ -12,7 +12,7 @@ class Figure(BaseModel):
     height: int
     preview_video_url: str
 
-class OpenApiPerson(BaseModel):
+class CommonPerson(BaseModel):
     """公共数字人信息数据模型"""
     id: str
     name: str
@@ -86,3 +86,13 @@ class FontInfo(BaseModel):
     name: str
     preview: str
     ttf_path: str
+
+class UserInfo(BaseModel):
+    """用户信息"""
+    name: str
+    id: str
+    custom_person_nums: int
+    custom_person_limit: int
+    video_create_seconds: int
+    video_create_limit: int
+
