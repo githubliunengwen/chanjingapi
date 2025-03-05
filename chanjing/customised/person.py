@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
-
+import chanjing.schemas
 from chanjing.core import ChanjingHttpClient
 
 
@@ -17,6 +17,24 @@ class CreateCustomisedPersonRequest(BaseModel):
     material_video: str
     callback: str
     train_type: Optional[str] = None
+
+class ListCustomisedPersonRequest(BaseModel):
+    """定制数字人列表请求模型
+    
+    属性:
+        page: 当前页码
+        page_size: 每页记录数
+    """
+    page : int
+    page_size: int
+
+class DeleteCustomisedPersonRequest(BaseModel):
+    """删除定制数字人请求模型
+    
+    属性:
+        id: 定制数字人ID
+    """
+    id  : str
 
 class CustomisedPerson(object):
     def __init__(self,client:ChanjingHttpClient) -> None:
@@ -35,5 +53,35 @@ class CustomisedPerson(object):
         Args:
             request: 创建定制数字人请求
         """
-        self.client.request("POST", "create_customised_person", json=request.model_dump())
-        pass
+        response = self.client.request("POST", "create_customised_person", json=request.model_dump())
+        return response.data
+
+    def list(self , request:ListCustomisedPersonRequest)->chanjing.schemas.ResponseData:
+        """
+        定制数字人列表
+        
+        Args:
+            request: 定制数字人列表请求
+        """
+        response = self.client.request("POST", "list_customised_person", json=request.model_dump())
+        return response.data
+
+    def detail(self , id:str)->chanjing.schemas.Person:
+        """
+        定制数字人形象详情
+        
+        Args:
+            id: 定制数字人ID
+        """
+        response = self.client.request("GET", "customised_person", params={"id": id})
+        return response.data
+
+    def delete(self , request:DeleteCustomisedPersonRequest)->chanjing.schemas.APIResponse:
+        """
+        删除定制数字人
+        
+        Args:
+            request: 删除定制数字人请求
+        """
+        response = self.client.request("POST", "delete_customised_person", json=request.model_dump())
+        return response

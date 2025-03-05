@@ -72,7 +72,8 @@ class ChanjingHttpClient(object):
         headers.update({
             "access_token": self.access_token,
             "Content-Type": "application/json",
-            "Accept": "application/json"
+            "Accept": "application/json",
+            "charset": "utf-8"
         })
         
         # 记录请求信息（不包含敏感信息）
